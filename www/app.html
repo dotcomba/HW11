@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <title>Service App</title>
+            <link href="Scripts/twbs-bootstrap-7b9f204/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+         <style type="text/css">
+        body 
+        {
+            margin:30px;
+        }       
+      
+        input {margin:2px;}
+    </style>
+    </head>
+    <body  onload="onLoad();">
+        <script src="Scripts/jquery-1.4.1.min.js" type="text/javascript"></script>
+    <script src="Scripts/twbs-bootstrap-7b9f204/js/tests/vendor/jquery.min.js"></script>
+    <script src="Scripts/twbs-bootstrap-7b9f204/js/modal.js"></script>
+    <script src="Scripts/twbs-bootstrap-7b9f204/js/tooltip.js"></script>
+    <script src="Scripts/twbs-bootstrap-7b9f204/js/popover.js"></script>
+
+
+
+
+    <script>
+        $(function () {
+            $('.js-popover').popover()
+            $('.js-tooltip').tooltip()
+            $('#tall-toggle').click(function () {
+                $('#tall').toggle()
+            })
+        })
+    </script>
+       <script type="text/javascript" src="js/cordova.js"></script>
+            <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript">
+
+        function GetSum() {
+
+            var number1 = $("#txtFirstNum").val();
+            var number2 = $("#txtSecondNum").val();
+
+            if (number1 == "" || number2 == "") {
+                alert('You need to type two numbers!');
+                return;
+            }
+
+            $.ajax({
+                url: "http://hw-test.azurewebsites.net/AstelitWebService.asmx/TwoNumbersPlus",
+                type: 'POST',
+                data: '{number1: ' + number1 + ', number2: ' + number2 + '}',
+                       contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                            var myData = JSON.parse(data.d);
+                            $("#divResult").html("Сервис вернул сумму = " + myData.Result);
+                },
+                error: function (request, status, error) {
+
+                    $("#divResult").html("<div class='btn btn-danger'>Ошибка</div>&nbsp; Ошибка в процессе обработки запроса " + error);
+                }
+            });
+
+        }
+
+        function onLoad() {
+            app.initialize();
+            console.log("device reday !!!!")
+            document.addEventListener("deviceready", onDeviceReady, true);
+        }
+        function exitFromApp() {
+            console.log("in button");
+            alert('Программа будет закрыта');
+            navigator.app.exitApp();
+        }
+
+    </script>
+        
+      <div class="page-header">
+            <div class="btn-group" style='float:right'>
+      <button type="reset" class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#" >Главное меню <span class="caret"></span></button>
+      <ul class="dropdown-menu">
+        <li><a href="index.html">Вернуться обратно</a></li>
+         <li><a href="javascript:exitFromApp()">Закрыть программу</a></li>
+        <li class="divider"></li>
+        <li><a href="#" data-toggle='modal' data-target='#myModal'>О программе</a></li>
+      </ul>
+    </div>
+    <h1>App <small>подсчета суммы чисел</small></h1>
+    </div>
+
+
+
+    <script src="Scripts/twbs-bootstrap-7b9f204/js/transition.js"></script>
+<script src="Scripts/twbs-bootstrap-7b9f204/js/button.js"></script>
+<script src="Scripts/twbs-bootstrap-7b9f204/js/dropdown.js"></script>
+    
+<script>
+    $(function () {
+        $('.js-loading-button').on('click', function () {
+            var btn = $(this).button('loading')
+            setTimeout(function () {
+                btn.button('reset')
+            }, 3000)
+        })
+    })
+</script>
+
+    <h4>Введите два числа:</h4>
+
+    1 число: <input type="number" id="txtFirstNum" class="form-control js-popover"  
+                       title="Первое число" 
+                       data-content="Вы должны ввести целое число!" 
+                       data-placement="bottom" /><br />
+    2 число: <input type="number" id="txtSecondNum" class="form-control js-popover"  
+                       title="Второе число" 
+                       data-content="Вы должны ввести еще одно целое число!" 
+                       data-placement="bottom" /><br /><br />
+    <p style="text-align:right;">
+        <button type="button" class="btn" id="btnGetSumm" onclick="GetSum()">Запросить сумму</button>
+    </p>
+    
+
+    <br />
+     
+      <div id="divResult" runat="server" ></div><br />
+      
+
+      <p>Калькуляция осущестувляется сервисом <a href="http://hw-test.azurewebsites.net/AstelitWebService.asmx">Azure web-service</a> </p>
+   
+
+    
+  <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="myModalLabel">О программе</h4>
+        </div>
+        <div class="modal-body">
+          <h5>Зачем это нужно?</h5>
+
+          <p>Эта программа предназначена для показа возможностей работы PhoneGap with Bootstrap.</p>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+     
+
+    </body>
+</html>
